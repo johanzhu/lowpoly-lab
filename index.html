@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="js/three.min.js" ></script>
 		<script type="text/javascript" src="js/OBJLoader.js" ></script>
 		<script type="text/javascript" src="js/MTLLoader.js" ></script>
+		<script type="text/javascript" src="js/tween.js" ></script>
 	</head>
 	<style>
 	    body,html{width: 100%;height: 100%;margin: 0;padding: 0;overflow: hidden;}
@@ -100,6 +101,11 @@
               diqiu = object;
               object.scale.set(0.5,0.5,0.5);
 		      scene.add( object );
+		      new TWEEN.Tween(diqiu.scale).to({
+	        	x : 0.5,
+	        	y : 0.5,
+	        	z : 0.5
+	        },2000).start();
 		      animate();
 
 		}, onProgress, onError );
