@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/three.min.js" ></script>
+		<script type="text/javascript" src="js/OBJLoader.js" ></script>
+		<script type="text/javascript" src="js/MTLLoader.js" ></script>
+	</head>
+	<style>
+	    body,html{width: 100%;height: 100%;margin: 0;padding: 0;overflow: hidden;}
+		#world{
+			width: 100%;
+			height: 100%;
+			background-color: lightblue;
+		}
+		#title{
+			position: absolute;
+			top: 0;
+			left: 0;
+			font-size: 30px;
+			font-family: "微软雅黑";
+			color: white;
+			text-shadow: 3px 3px 1px #000;
+		}
+		#github{
+			display: block;
+			position: absolute;
+			bottom: 50px;
+			left: 20px;
+			font-size: 20px;
+			font-family: "微软雅黑";
+			color: white;
+			text-shadow: 3px 3px 1px #000;
+			text-decoration: none;
+		}
+	</style>
+	<body>
+		<div id="world">
+			<!--画布-->
+		</div>
+		<div id="title">
+			Lab-1-planet
+		</div>
+		<a id="github" href="https://github.com/johanzhu" target="_blank">
+		    Follow me on github
+		</a>
+		<script>
+			var scene,
+			camera,
+			renderer,
+			diqiu;
+			
+			scene = new THREE.Scene();
+		    camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.1,2000);
+			camera.position.set(0,0,800);
+			camera.lookAt(new THREE.Vector3(0,0,0));
+		    renderer = new THREE.WebGLRenderer({alpha:true,antialias:true});
+		    renderer.setSize(window.innerWidth,window.innerHeight);
+		    renderer.shadowMapEnabled = true;
+		    var container =  document.getElementById('world');
+		    container.appendChild(renderer.domElement);
+		    window.addEventListener('resize',onWindowResize,false);
+		    function onWindowResize(){
+	           WIDTH=window.innerWidth;
+	           HEIGHT=window.innerHeight;
+               renderer.setSize(WIDTH, HEIGHT);
+               camera.aspect = WIDTH / HEIGHT;
+               camera.updateProjectionMatrix();
+            }
+		    
+		    
+		    var axis = new THREE.AxisHelper(50);
+		    scene.add(axis);
+		    
+		    var ambient = new THREE.AmbientLight( 0x444444 );
+			scene.add( ambient );
+			var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+			directionalLight.position.set( 0, 0, 1 );
+			scene.add( directionalLight );
+            
+			
+	    var onProgress = function ( xhr ) {
+		if ( xhr.lengthComputable ) {
+			var percentComplete = xhr.loaded / xhr.total * 100;
+					}
+				};
+
+        var onError = function ( xhr ) { };
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath( 'img/' );
+        mtlLoader.load( 'diqiu.mtl', function( materials ) {
+              
+              materials.preload();
+
+              var objLoader = new THREE.OBJLoader();
+              objLoader.setMaterials( materials );
+              objLoader.setPath( 'img/' );
+              objLoader.load( 'diqiu.obj', function ( object ) {
+              diqiu = object;
+              object.scale.set(0.5,0.5,0.5);
+		      scene.add( object );
+		      animate();
+
+		}, onProgress, onError );
+
+				});
+	    
+	    var mtlLoader2 = new THREE.MTLLoader();
+        mtlLoader2.setPath( 'img/' );
+        mtlLoader2.load( '云彩.mtl', function( materials ) {
+              
+              materials.preload();
+
+              var objLoader2 = new THREE.OBJLoader();
+              objLoader2.setMaterials( materials );
+              objLoader2.setPath( 'img/' );
+              objLoader2.load( '云彩.obj', function ( object ) {
+              object.scale.set(0.5,0.5,0.5);
+		      scene.add( object );
+
+		      });
+	   });
+			
+	    
+			
+			function animate(){
+				diqiu.rotation.x += Math.PI/160;
+				diqiu.rotation.y += Math.PI/160;
+				requestAnimationFrame(animate);
+				render();
+			}
+			function render(){
+	            renderer.render(scene,camera);
+            }
+		</script>
+	</body>
+</html>
