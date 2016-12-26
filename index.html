@@ -20,7 +20,7 @@
 			top: 0;
 			left: 0;
 			font-size: 30px;
-			font-family: "微软雅黑";
+			font-family:  "bodoni mt black";
 			color: white;
 			text-shadow: 3px 3px 1px #000;
 		}
@@ -29,11 +29,29 @@
 			position: absolute;
 			bottom: 50px;
 			left: 20px;
-			font-size: 20px;
+			font-size: 22px;
 			font-family: "微软雅黑";
 			color: white;
 			text-shadow: 3px 3px 1px #000;
 			text-decoration: none;
+		}
+		#loading{
+			width: 100%;
+			height: 100%;
+			text-align: center;
+			position: absolute;
+			top: 0;
+			font-size: 30px;
+			font-family: "comic sans ms";
+			z-index: 5;
+			background-color: #ADD8E6;
+		}
+		#loading:after{
+			display:inline-block;
+            width:0;
+            height:100%;
+            vertical-align:middle;
+            content:"";
 		}
 	</style>
 	<body>
@@ -46,12 +64,16 @@
 		<a id="github" href="https://github.com/johanzhu" target="_blank">
 		    Follow me on github
 		</a>
+		<div id="loading">
+			Loading...
+		</div>
 		<script>
 			var scene,
 			camera,
 			renderer,
 			diqiu;
-			
+			var loading = false;
+			var manager = null;
 			scene = new THREE.Scene();
 		    camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.1,2000);
 			camera.position.set(0,0,800);
@@ -70,9 +92,12 @@
                camera.updateProjectionMatrix();
             }
 		    
-		    
-		    var axis = new THREE.AxisHelper(50);
-		    scene.add(axis);
+		    manager = new THREE.LoadingManager();
+		    manager.onLoad = function(){
+		    	console.log('resourse complete!');
+		    	loading = true;
+		    };
+		    var load = document.getElementById('loading');
 		    
 		    var ambient = new THREE.AmbientLight( 0x444444 );
 			scene.add( ambient );
@@ -85,40 +110,42 @@
 		if ( xhr.lengthComputable ) {
 			var percentComplete = xhr.loaded / xhr.total * 100;
 					}
-				};
+	    };
 
         var onError = function ( xhr ) { };
-        var mtlLoader = new THREE.MTLLoader();
+        var mtlLoader = new THREE.MTLLoader(manager );
         mtlLoader.setPath( 'img/' );
         mtlLoader.load( 'diqiu.mtl', function( materials ) {
-              
               materials.preload();
 
-              var objLoader = new THREE.OBJLoader();
+              var objLoader = new THREE.OBJLoader(manager );
               objLoader.setMaterials( materials );
               objLoader.setPath( 'img/' );
               objLoader.load( 'diqiu.obj', function ( object ) {
               diqiu = object;
               object.scale.set(0.8,0.8,0.8);
-		      scene.add( object );
-		      new TWEEN.Tween(diqiu.scale).to({
+              new TWEEN.Tween(diqiu.scale).to({
 	        	x : 0.5,
 	        	y : 0.5,
 	        	z : 0.5
 	        },2000).start();
+	        new TWEEN.Tween(camera.rotation).to({
+	        	x: 0,
+	        	y: 0,
+	        	z: 0
+	        },9000).start();
+		      scene.add( object );
 		      animate();
 
 		}, onProgress, onError );
 
 				});
-	    
-	    var mtlLoader2 = new THREE.MTLLoader();
+	    var mtlLoader2 = new THREE.MTLLoader(manager );
         mtlLoader2.setPath( 'img/' );
         mtlLoader2.load( '云彩.mtl', function( materials ) {
-              
               materials.preload();
 
-              var objLoader2 = new THREE.OBJLoader();
+              var objLoader2 = new THREE.OBJLoader(manager );
               objLoader2.setMaterials( materials );
               objLoader2.setPath( 'img/' );
               objLoader2.load( '云彩.obj', function ( object ) {
@@ -126,11 +153,14 @@
 		      scene.add( object );
 
 		      });
-	   });
+	   },onProgress);
 			
-	    
+	        
 			
 			function animate(){
+				if( loading == true){
+					load.style.display = 'none';
+				}
 				diqiu.rotation.x += Math.PI/160;
 				diqiu.rotation.y += Math.PI/160;
 				requestAnimationFrame(animate);
