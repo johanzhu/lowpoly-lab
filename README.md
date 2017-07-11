@@ -2,8 +2,8 @@
 This is my lowpoly lab!^ - ^!</br>
 You can see all my three.js lowpoly works here!</br>
 https://johanzhu.github.io/lowpoly-lab/  (planet~)</br>
-http://johanzhu.github.io/lowpoly2/ (mountain,village)~</br>
-http://johanzhu.github.io/lowpoly3/ (sea,lighthouse~)</br>
+http://johanzhu.github.io/lowpoly2/ (mountain,village~)</br>
+http://johanzhu.github.io/lowpoly3/ (sea and lighthouse~) </br>
 http://johanzhu.github.io/lowpoly4/ (landscape and Diglett~)</br>
 http://johanzhu.github.io/lowpoly5/ (float island~)</br>
 https://johanzhu.github.io/lowpoly6/ (hero~)</br>
