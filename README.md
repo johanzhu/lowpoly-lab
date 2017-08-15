@@ -9,4 +9,5 @@ http://johanzhu.github.io/lowpoly5/ (float island~)</br>
 https://johanzhu.github.io/lowpoly6/ (hero~)</br>
 https://johanzhu.github.io/lowpoly7/ (pikachu~)</br>
 https://johanzhu.github.io/merry-christmas/ (christmas!!) </br>
+https://johanzhu.github.io/lowpoly8/ (light ball~)</br>
 我的lowpoly实验室！你可以点击上面的链接来观看哦 ^ - ^!
